@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { View, StyleSheet, FlatList, Alert, SafeAreaView} from 'react-native'
+import { View, StyleSheet, FlatList, Alert, SafeAreaView, Text} from 'react-native'
 import Header from './components/Header'
 import ListItem from './components/ListItem'
 import AddItem from './components/AddItem';
@@ -37,7 +37,7 @@ const App = () => {
   const createTables = () => {
     db.transaction(txn => {
       txn.executeSql(
-        'CREATE TABLE IF NOT EXISTS shopping_list (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(20))',
+        'CREATE TABLE IF NOT EXISTS shopping_list (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(20), quantity INTEGER)',
         [],
         (sqlTxn, res) => {
           console.log('table created successfullly')
@@ -63,7 +63,7 @@ const App = () => {
             let results = [];
             for (let i = 0; i < len; i++) {
               let item = res.rows.item(i);
-              results.push({id: item.id, text: item.name})
+              results.push({id: item.id, text: item.name, quantity: item.quantity})
             }
 
             setItems(results)
@@ -109,14 +109,14 @@ const App = () => {
   }
 
   // Add Item to Shopping List
-  const addItem = (text) => {
+  const addItem = (text, quantity) => {
     if(!text) {
       Alert.alert('Error', 'Please enter an item', [{text: 'Ok'}], {cancelable: true})
     } else {
       db.transaction(txn => {
         txn.executeSql(
-          'INSERT INTO shopping_list (name) VALUES (?)',
-          [text],
+          'INSERT INTO shopping_list (name, quantity) VALUES (?,?)',
+          [text, quantity],
           (sqlTxn, res) => {
             console.log(`${text} item added successfully`);
             getShoppingList();
@@ -130,7 +130,7 @@ const App = () => {
   }
 
   const itemInfo = (id) => {
-    Alert.alert('Info', items.find(item => item.id === id).text, {text: 'OK'})
+    Alert.alert('Info', items.find(item => item.id === id).text, [{text: 'OK'}], {cancelable: true})
   }
 
   return (

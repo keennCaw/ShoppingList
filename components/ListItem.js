@@ -4,9 +4,10 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome'
 
 const ListItem = ({item, deleteItem, itemInfo}) => {
   return (
-    <TouchableOpacity style={styles.listItem} onPress={() => itemInfo(item.id)}>
+    <TouchableOpacity style={styles.listItem} onLongPress={() => itemInfo(item.id)}>
         <View style={styles.listItemView}>
             <Text style={styles.listItemText}>{item.text}</Text>
+            <Text style={styles.listItemQty}>Qty: {item.quantity}</Text>
             <Icon name="remove" size={20} color="firebrick" onPress={() => deleteItem(item.id)}/>
         </View>
     </TouchableOpacity>
@@ -15,7 +16,6 @@ const ListItem = ({item, deleteItem, itemInfo}) => {
 
 const styles = StyleSheet.create({
     listItem: {
-        flex: 1,
         padding: 15,
         backgroundColor: '#f8f8f8',
         borderBottomWidth: 1,
@@ -28,6 +28,10 @@ const styles = StyleSheet.create({
     },
     listItemText: {
         fontSize: 18,
+        flex: 1
+    },
+    listItemQty: {
+        flex: 1
     }
 })
 

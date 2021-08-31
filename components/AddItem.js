@@ -9,8 +9,9 @@ const AddItem = ({ addItem }) => {
     const [number, setNumber] = useState(0);
 
     const onAddItem = () => {
-      addItem(text)
+      addItem(text, number)
       setText()
+      setNumber(0)
     }
 
     return (
